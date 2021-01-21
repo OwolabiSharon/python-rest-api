@@ -49,12 +49,14 @@ class USER(Resource):
         user = User(data['username'],data['password'],data['email'])
         users.append(user)
 
-        try:
-            message = Message('type in this to verify your email "random" ', sender ="iyowolabi@gmail.com",recipients =[user.email])
-            message.body = "na message be this"
-            mail.send(message)
-        except:
-            return {'message':'something went wrong is your email valid bayi???'}
+        message = Message('type in this to verify your email "random" ', sender ="iyowolabi@gmail.com",recipients =[user.email])
+        message.body = "na message be this"
+        mail.send(message)
+
+        #try:
+            
+        #except:
+        #    return {'message':'something went wrong is your email valid bayi???'}
 
 
         return {"message": "User created successfully, verify your email, something as been sent to your email"}, 201
