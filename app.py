@@ -46,13 +46,14 @@ class USER(Resource):
             return {"message": "User with that username already exists."}, 400
         user = User(data['username'],data['password'],data['email'])
         users.append(user)
+        message = Message('type in this to verify your email "random" ', sender ="iyowolabi@gmail.com",recipients =[user.email])
+        message.body = "na message be this"
+        mail.send(message)
 
-        try:
-            message = Message('type in this to verify your email "random" ', sender ="iyowolabi@gmail.com",recipients =[user.email])
-            message.body = "na message be this"
-            mail.send(message)
-        except:
-            return {'message':'something went wrong is your email valid bayi???'}
+        #try:
+
+        #except:
+            #return {'message':'something went wrong is your email valid bayi???'}
 
 
         return {"message": "User created successfully, verify your email, something as been sent to your email"}, 201
