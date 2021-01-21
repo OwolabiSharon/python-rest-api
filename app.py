@@ -19,9 +19,6 @@ app.config['MAIL_PASSWORD']='temi1967'
 api = Api(app)
 mail = Mail(app)
 
-@app.before_first_request
-def create_table():
-    db.create_all()
 
 class USER(Resource):
 
