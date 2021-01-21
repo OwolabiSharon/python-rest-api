@@ -10,9 +10,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = '!@#$%^&*()_+=-0987654321'
 app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_PORT']=465
-app.config['MAIL_USE_TLS']=False
-app.config['MAIL_USE_SSL']=True
+app.config['MAIL_PORT']= 587
+app.config['MAIL_USE_TLS']=True
+app.config['MAIL_USE_SSL']=False
 app.config['MAIL_USERNAME']='iyowolabi@gmail.com'
 app.config['MAIL_PASSWORD']='temi1967'
 
@@ -46,14 +46,13 @@ class USER(Resource):
             return {"message": "User with that username already exists."}, 400
         user = User(data['username'],data['password'],data['email'])
         users.append(user)
-        message = Message('type in this to verify your email "random" ', sender ="iyowolabi@gmail.com",recipients =[user.email])
-        message.body = "na message be this"
-        mail.send(message)
 
-        #try:
-
-        #except:
-            #return {'message':'something went wrong is your email valid bayi???'}
+        try:
+            message = Message('type in this to verify your email "random" ', sender ="iyowolabi@gmail.com",recipients =[user.email])
+            message.body = "na message be this"
+            mail.send(message)
+        except:
+            return {'message':'something went wrong is your email valid bayi???'}
 
 
         return {"message": "User created successfully, verify your email, something as been sent to your email"}, 201
