@@ -7,7 +7,7 @@ from models.user import User
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = '!@#$%^&*()_+=-0987654321'
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -17,8 +17,8 @@ app.config['MAIL_USE_SSL']= False
 app.config['MAIL_DEBUG']= True
 app.config['TESTING']=False
 app.config['MAIL_SUPPRESS_SEND'] = False
-app.config['MAIL_USERNAME']='iyowolabi@gmail.com'
-app.config['MAIL_PASSWORD']='temi1967'
+app.config['MAIL_USERNAME']='sharexy23@gmail.com'
+app.config['MAIL_PASSWORD']='@#phone123'
 
 api = Api(app)
 mail = Mail(app)
