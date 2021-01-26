@@ -4,6 +4,7 @@ from resources.user import Email
 from flask_mail import *
 from db import db
 from models.user import User
+import random
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -43,6 +44,8 @@ class USER(Resource):
                         help="This field cannot be left blank!"
                         )
     def post(self):
+        numbers = ["345678900", "8899998777","788993545", '8765433456',"6547782","6367476426248","784748484747"]
+        random_number = random.choice(numbers)
         users = []
         data = USER.parser.parse_args()
 
@@ -51,7 +54,7 @@ class USER(Resource):
         user = User(data['username'],data['password'],data['email'])
         users.append(user)
 
-        message = Message('type in this to verify your email "random" ', sender ="iyowolabi@gmail.com",recipients =[user.email])
+        message = Message('type in this to verify your email ' + random_number +'God bless you as you do so' , sender ="iyowolabi@gmail.com",recipients =[user.email])
         message.body = "na message be this"
         mail.send(message)
 
