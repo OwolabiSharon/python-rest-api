@@ -85,14 +85,15 @@ class Email(Resource):
                         help="This field cannot be left blank!"
                         )
     def post(self):
+        global users
         data = Email.parser.parse_args()
-        if User.find_by_username(data['username']):
-            return {"message": "this user as already been verified and is saved in our database"}, 400
+        if User.find_by_email(data['email']):
+            return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
-        #elif data['verification_code'] == 'random':
-        #    user = User(data['username'],data['password'],data['email'])
-        #    User.save_to_db(user)
-        #return {'message':'now you are verified and saved to our database'}
+        elif data['verification_code'] == 'random':
+            user = users[0]
+            User.save_to_db(user)
+        return {'message':'now you are verified and saved to our database'}
 
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
