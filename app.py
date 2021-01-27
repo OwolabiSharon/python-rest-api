@@ -87,16 +87,18 @@ class Email(Resource):
     def post(self):
         global users
         data = Email.parser.parse_args()
+
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
-        elif data['verification_code'] == 'random' and data['email'] == users[0].email:
+        if data['verification_code'] == ('random_number'):
             user = users[0]
             User.save_to_db(user)
         return {'message':'now you are verified and saved to our database'}
 
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
+
 
 if __name__ == '__main__':
     from db import db
