@@ -24,6 +24,7 @@ app.config['MAIL_PASSWORD']='@#phone123'
 api = Api(app)
 mail = Mail(app)
 
+users = []
 
 class USER(Resource):
 
@@ -46,7 +47,8 @@ class USER(Resource):
     def post(self):
         numbers = ["345678900", "8899998777","788993545", '8765433456',"6547782","6367476426248","784748484747"]
         random_number = random.choice(numbers)
-        users = []
+        global users
+
         data = USER.parser.parse_args()
 
         if User.find_by_username(data['username']):
@@ -54,15 +56,13 @@ class USER(Resource):
         user = User(data['username'],data['password'],data['email'])
         users.append(user)
 
-        message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
-        message.body = "type in this to verify your email " + random_number + "God bless you as you do so"
-        mail.send(message)
 
-
-        #try:
-            
-        #except:
-        #    return {'message':'something went wrong is your email valid bayi???'}
+        try:
+            message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
+            message.body = "type in this to verify your email " + random_number + "God bless you as you do so"
+            mail.send(message)
+        except:
+            return {'message':'something went wrong is your email valid bayi???'}
 
 
         return {"message": "User created successfully, verify your email, something as been sent to your email"}, 201
@@ -78,16 +78,7 @@ class Email(Resource):
                         required=True,
                         help="This field cannot be left blank!"
                         )
-    parser.add_argument('username',
-                        type=str,
-                        required=True,
-                        help="This field cannot be left blank!"
-                        )
-    parser.add_argument('password',
-                        type=str,
-                        required=True,
-                        help="This field cannot be left blank!"
-                        )
+
     parser.add_argument('email',
                         type=str,
                         required=True,
@@ -97,10 +88,11 @@ class Email(Resource):
         data = Email.parser.parse_args()
         if User.find_by_username(data['username']):
             return {"message": "this user as already been verified and is saved in our database"}, 400
-        elif data['verification_code'] == 'random':
-            user = User(data['username'],data['password'],data['email'])
-            User.save_to_db(user)
-        return {'message':'now you are verified and saved to our database'}
+
+        #elif data['verification_code'] == 'random':
+        #    user = User(data['username'],data['password'],data['email'])
+        #    User.save_to_db(user)
+        #return {'message':'now you are verified and saved to our database'}
 
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
