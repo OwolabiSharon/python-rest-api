@@ -102,8 +102,14 @@ class Email(Resource):
             User.save_to_db(user)
         return {'message':'now you are verified and saved to our database'}
 
+
+class userList(Resource):
+    def get(self):
+        return {'user': [x.json() for x in User.query.all()]}
+
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
+api.add_resource(userList, '/users')
 
 
 if __name__ == '__main__':
