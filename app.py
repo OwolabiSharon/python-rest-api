@@ -85,21 +85,17 @@ class Email(Resource):
                         help="This field cannot be left blank!"
                         )
 
-    parser.add_argument('username',
-                        type=str,
-                        required=True,
-                        help="This field cannot be left blank!"
-                        )
+
     def post(self):
         global users
         data = Email.parser.parse_args()
 
-        if User.find_by_username(data['username']):
+        if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
-        if data['verification_code'] == ('random_number'):
-            user = users[0]
-            User.save_to_db(user)
+        if data['verification_code'] == 'random_number':
+            #user = users[0]
+            #User.save_to_db(user)
         return {'message':'now you are verified and saved to our database'}
 
 
