@@ -54,7 +54,7 @@ class USER(Resource):
         if User.find_by_username(data['username']):
             return {"message": "User with that username already exists."}, 400
         user = User(data['username'],data['password'],data['email'])
-        User.save_to_db(user)
+        users.append(user)
 
 
         try:
@@ -92,13 +92,11 @@ class Email(Resource):
         data = Email.parser.parse_args()
 
 
-        user = User.find_by_email(data['email'])
+        user = list(filter(lambda x: x.email ==data['email'] , users))
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
-            
+
         elif data['verification_code'] in numbers  and user.email == data['email']:
-            User.delete_from_db(user)
-            User.save_to_db(user)
             return {'message':'now you are verified and saved to our database'}
 
 
