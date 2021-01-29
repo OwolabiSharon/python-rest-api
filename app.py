@@ -102,8 +102,8 @@ class Email(Resource):
         elif data['verification_code'] in numbers:
             for user in users:
                 if user['email'] == data['email']:
-                    return jsonify(user)
-            #return {'message':'now you are verified and saved to our database'}
+                    User.save_to_db(user)
+            return {'message':'now you are verified and saved to our database'}
 
 
 
