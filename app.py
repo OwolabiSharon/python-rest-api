@@ -92,7 +92,7 @@ class Email(Resource):
         data = Email.parser.parse_args()
 
 
-        user = list(filter(lambda x: x['email'] ==data['email'] , users))
+        user = (filter(lambda x: x['email'] ==data['email'] , users))
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
