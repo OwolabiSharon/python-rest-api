@@ -95,8 +95,8 @@ class Email(Resource):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
         elif data['verification_code'] in numbers:
             #(x for x in users if x.email == data['email'])
-            X = filter (lambda x:  x.email == data['email'] , users) 
-            User.save_to_db(x)
+            user = filter (lambda x:  x.email == data['email'] , users)
+            User.save_to_db(user)
             return {'message':'now you are verified and saved to our database'}
 
 
