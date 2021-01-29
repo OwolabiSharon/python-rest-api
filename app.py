@@ -58,7 +58,7 @@ class USER(Resource):
         user ={'username':data['username'], 'password': data['password'],'email':data['email']}
         users.append(user)
 
-        message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
+        message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user['email']])
         message.body = "type in this to verify your email " + random_number + "God bless you as you do so"
         mail.send(message)
 
