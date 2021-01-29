@@ -55,7 +55,7 @@ class USER(Resource):
 
         if User.find_by_username(data['username']):
             return {"message": "User with that username already exists."}, 400
-        user = User(data['username'],data['password'],data['email'])
+        user ={'username':data['username'], 'password': data['password'],'email':data['email']}
         users.append(user)
 
 
