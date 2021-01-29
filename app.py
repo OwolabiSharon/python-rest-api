@@ -96,7 +96,7 @@ class Email(Resource):
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
-        elif data['verification_code'] in numbers  and user.email == data['email']:
+        elif data['verification_code'] in numbers  and user['email'] == data['email']:
             return {'message':'now you are verified and saved to our database'}
 
 
