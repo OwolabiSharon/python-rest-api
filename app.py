@@ -107,8 +107,7 @@ class Email(Resource):
 class userList(Resource):
     global users
     def get(self):
-        return jsonify(users)
-        #return {'user': [x.json() for x in User.query.all()]}
+        return {'user': [x.json() for x in User.query.all()]}
 
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
