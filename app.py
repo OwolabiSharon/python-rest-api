@@ -96,8 +96,8 @@ class Email(Resource):
         elif data['verification_code'] in numbers:
             #(x for x in users if x.email == data['email'])
             user = filter (lambda x:  x.email == data['email'] , users)
-            User.save_to_db(user)
-            return {'message':'now you are verified and saved to our database'}
+            return user.json()
+            #return {'message':'now you are verified and saved to our database'}
 
 
 
