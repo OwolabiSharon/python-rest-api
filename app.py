@@ -20,7 +20,7 @@ app.config['MAIL_USE_SSL']= False
 app.config['MAIL_DEBUG']= True
 app.config['TESTING']=False
 app.config['MAIL_SUPPRESS_SEND'] = False
-app.config['MAIL_USERNAME']='sharexy23@gmail.com'
+app.config['MAIL_USERNAME']='ubeussharexy@gmail.com'
 app.config['MAIL_PASSWORD']='@#phone123'
 
 api = Api(app)
