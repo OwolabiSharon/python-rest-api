@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api,Resource, reqparse
 #from resources.user import Email
 from flask_mail import *
@@ -99,8 +99,10 @@ class Email(Resource):
 
 
 class userList(Resource):
+    global users
     def get(self):
-        return {'user': [x.json() for x in User.query.all()]}
+        return jsonify(users)
+        #return {'user': [x.json() for x in User.query.all()]}
 
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
