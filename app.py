@@ -55,7 +55,7 @@ class USER(Resource):
 
         if User.find_by_username(data['username']):
             return {"message": "User with that username already exists."}, 400
-        user ={'username':data['username'], 'password': data['password'],'email':data['email']}
+        user = User(data['username'], data['password'],data['email'])
         users.append(user)
 
         message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user['email']])
@@ -111,7 +111,8 @@ class Email(Resource):
 class userList(Resource):
     global users
     def get(self):
-        return {'user': [x.json() for x in User.query.all()]}
+        return jsonify(users)
+        #return {'user': [x.json() for x in User.query.all()]}
 
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
