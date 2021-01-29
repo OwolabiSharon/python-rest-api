@@ -9,7 +9,7 @@ from models.user import User
 import random
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] =os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = '!@#$%^&*()_+=-0987654321'
 
@@ -94,14 +94,11 @@ class Email(Resource):
         data = Email.parser.parse_args()
 
 
-
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
         elif data['verification_code'] in numbers:
-            for user in users:
-                if user['email'] == data['email']:
-                    User.save_to_db(user)
+            User.save_to_db(users)
             return {'message':'now you are verified and saved to our database'}
 
 
