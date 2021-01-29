@@ -58,7 +58,7 @@ class USER(Resource):
         user = User(data['username'], data['password'],data['email'])
         users.append(user)
 
-        message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user['email']])
+        message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
         message.body = "type in this to verify your email " + random_number + "God bless you as you do so"
         mail.send(message)
 
@@ -101,7 +101,7 @@ class Email(Resource):
 
         elif data['verification_code'] in numbers:
             for user in users:
-                if user['email'] == data['email']:
+                if user.email == data['email']:
                     User.save_to_db(user)
             return {'message':'now you are verified and saved to our database'}
 
