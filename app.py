@@ -95,7 +95,7 @@ class Email(Resource):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
         elif data['verification_code'] in numbers:
             for user in users:
-                if data['email'] in user:
+                if data['email'] in user in users :
                     return user.json()
 
             return {'message':'now you are verified and saved to our database'}
