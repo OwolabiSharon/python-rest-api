@@ -25,7 +25,7 @@ api = Api(app)
 mail = Mail(app)
 
 users = []
-
+numbers = ["345678900", "8899998777","788993545", '8765433456',"6547782","6367476426248","784748484747"]
 class USER(Resource):
 
     parser = reqparse.RequestParser()
@@ -87,6 +87,7 @@ class Email(Resource):
 
 
     def post(self):
+        global numbers
         global users
         data = Email.parser.parse_args()
 
