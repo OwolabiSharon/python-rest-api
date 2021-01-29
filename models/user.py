@@ -21,6 +21,9 @@ class User(db.Model):
         db.session.delete(self)
         db.session.commit()
 
+    def json(self):
+        return { 'username':self.username,'password':self.password,'email':self.email}
+
     @classmethod
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
