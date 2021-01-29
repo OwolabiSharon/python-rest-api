@@ -3,3 +3,4 @@ Flask-RESTful
 Flask-Mail
 Flask-SQLAlchemy
 uwsgi
+psycopg2
