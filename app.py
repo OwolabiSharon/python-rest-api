@@ -58,13 +58,15 @@ class USER(Resource):
         user ={'username':data['username'], 'password': data['password'],'email':data['email']}
         users.append(user)
 
+        message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
+        message.body = "type in this to verify your email " + random_number + "God bless you as you do so"
+        mail.send(message)
 
-        try:
-            message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
-            message.body = "type in this to verify your email " + random_number + "God bless you as you do so"
-            mail.send(message)
-        except:
-            return {'message':'something went wrong is your email valid bayi???'}
+
+        #try:
+
+        #except:
+        #    return {'message':'something went wrong is your email valid bayi???'}
 
 
         return {"message": "User created successfully, verify your email, something as been sent to your email"}, 201
@@ -93,12 +95,14 @@ class Email(Resource):
         global users
         data = Email.parser.parse_args()
 
-        user = next(filter(lambda x: x['email'] == data['email'] , users))
+        #user = next(filter(lambda x: x['email'] == data['email'] , users))
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
         elif data['verification_code'] in numbers:
-            return user.json()
+            for user in users:
+                if user['email'] == data['email']:
+                    return user.json()
             #return {'message':'now you are verified and saved to our database'}
 
 
