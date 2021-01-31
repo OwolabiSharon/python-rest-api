@@ -125,7 +125,7 @@ class delete_danu(Resource):
                         required=True,
                         help="This field cannot be left blank!"
                         )
-    def delete():
+    def delete(self):
         data = delete_danu.parser.parse_args()
         user = User.find_by_email(data['email'])
         if user is not None:
