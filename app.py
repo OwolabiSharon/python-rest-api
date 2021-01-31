@@ -65,7 +65,7 @@ class USER(Resource):
         if User.find_by_username(data['username']):
             return {"message": "User with that username already exists."}, 400
         user = User(data['username'], data['password'],data['email'])
-        encrypt_string(user.password)
+        user.password = encrypt_string(user.password)
         users.append(user)
 
         message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
@@ -143,7 +143,7 @@ class userList(Resource):
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
 api.add_resource(userList, '/users')
-api.add_resource(delete_danu, 'del')
+api.add_resource(delete_danu, '/del')
 
 
 if __name__ == '__main__':

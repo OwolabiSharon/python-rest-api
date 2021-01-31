@@ -4,4 +4,3 @@ Flask-Mail
 Flask-SQLAlchemy
 uwsgi
 psycopg2
-hashlib
