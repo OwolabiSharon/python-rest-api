@@ -143,6 +143,7 @@ class userList(Resource):
 api.add_resource(USER, '/register')
 api.add_resource(Email, '/verify')
 api.add_resource(userList, '/users')
+api.add_resource(delete_danu, 'del')
 
 
 if __name__ == '__main__':
