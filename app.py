@@ -1,4 +1,5 @@
 import os
+import hashlib
 
 from flask import Flask, jsonify
 from flask_restful import Api,Resource, reqparse
@@ -28,6 +29,14 @@ mail = Mail(app)
 
 users = []
 numbers = ["345678900", "8899998777","788993545", '8765433456',"6547782","6367476426248","784748484747"]
+
+
+def encrypt_string(hash_string):
+    sha_signature = \
+        hashlib.sha256(hash_string.encode()).hexdigest()
+    return sha_signature
+
+
 class USER(Resource):
 
     parser = reqparse.RequestParser()
@@ -101,9 +110,8 @@ class Email(Resource):
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
-        #user = next(filter(lambda x: x.email == data['email'] , users))
-
         elif data['verification_code'] in numbers and user.email == data['email']:
+            encrypt_string(user.password)
             User.save_to_db(user)
             return {'message':'now you are verified and saved to our database'}
         return {'message':'you dont know what you are doing'}
