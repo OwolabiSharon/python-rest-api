@@ -65,6 +65,7 @@ class USER(Resource):
         if User.find_by_username(data['username']):
             return {"message": "User with that username already exists."}, 400
         user = User(data['username'], data['password'],data['email'])
+        encrypt_string(user.password)
         users.append(user)
 
         message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
@@ -111,12 +112,26 @@ class Email(Resource):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
         elif data['verification_code'] in numbers and user.email == data['email']:
-            encrypt_string(user.password)
             User.save_to_db(user)
             return {'message':'now you are verified and saved to our database'}
         return {'message':'you dont know what you are doing'}
 
 
+class delete_danu(Resource):
+    parser = reqparse.RequestParser()
+
+    parser.add_argument('email',
+                        type=str,
+                        required=True,
+                        help="This field cannot be left blank!"
+                        )
+    def delete():
+        data = delete_danu.parser.parse_args()
+        user = User.find_by_email(data['email'])
+        if user is not None:
+            User.delete_from_db(user)
+            return {'message' : 'mo delete werey ;) :)'}
+        return {'message': 'user does not exist you want to delete it .....shogbadun'}
 
 
 class userList(Resource):
