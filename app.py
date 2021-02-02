@@ -29,6 +29,7 @@ mail = Mail(app)
 
 users = []
 numbers = ["345678900", "8899998777","788993545", '8765433456',"6547782","6367476426248","784748484747"]
+random_number = random.choice(numbers)
 
 
 def encrypt_string(hash_string):
@@ -56,9 +57,10 @@ class USER(Resource):
                         help="This field cannot be left blank!"
                         )
     def post(self):
-        numbers = ["345678900", "8899998777","788993545", '8765433456',"6547782","6367476426248","784748484747"]
-        random_number = random.choice(numbers)
+        #numbers = ["345678900", "8899998777","788993545", '8765433456',"6547782","6367476426248","784748484747"]
+        #random_number = random.choice(numbers)
         global users
+        global random_number
 
         data = USER.parser.parse_args()
 
@@ -101,7 +103,7 @@ class Email(Resource):
 
 
     def post(self):
-        global numbers
+        global random_number
         global users
         data = Email.parser.parse_args()
 
