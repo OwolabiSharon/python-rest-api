@@ -7,11 +7,13 @@ class User(db.Model):
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
     email = db.Column(db.String(80))
+    #verification_code = db.Column(db.String(80))
 
     def __init__(self, username, password,email):
         self.username = username
         self.password = password
         self.email = email
+        #self.verification_code = verification_code
 
     def save_to_db(self):
         db.session.add(self)

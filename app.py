@@ -71,7 +71,7 @@ class USER(Resource):
         users.append(user)
 
         message = Message('this is a verificatrion email from ubeus.sharexy.com' , sender ="iyowolabi@gmail.com",recipients =[user.email])
-        message.body = "type in this to verify your email " + random_number + "God bless you as you do so"
+        message.body = "type in this to verify your email " + user.password + " God bless you as you do so"
         mail.send(message)
 
 
@@ -103,7 +103,7 @@ class Email(Resource):
 
 
     def post(self):
-        global random_number
+        global numbers
         global users
         data = Email.parser.parse_args()
 
@@ -113,7 +113,7 @@ class Email(Resource):
         if User.find_by_email(data['email']):
             return {"message": "A user with this email as already been verified and is saved in our database"}, 400
 
-        elif data['verification_code'] == random_number and user.email == data['email']:
+        elif data['verification_code'] == user.password and user.email == data['email']:
             User.save_to_db(user)
             return {'message':'now you are verified and saved to our database'}
         return {'message':'you dont know what you are doing'}
