@@ -56,7 +56,11 @@ class register(Resource):
         user = User(data['phone_number'],data['firstname'],data['middlename'],data['lastname'],data['date_of_birth'],
         data['password'],data['email'],data['pin'],'00')
         User.save_to_db(user)
-        return {'message':'message'},201
+        return {
+        'status': True,
+        'data': user.json(),
+        'message':'message'
+        },201
 
 
 class login(Resource):
@@ -87,6 +91,7 @@ class login(Resource):
         'message':'user not found'
         }, 404
 
+@jwt_required()
 class account_balance(Resource):
 #    global users
     def get(self, phone_number):
@@ -95,7 +100,7 @@ class account_balance(Resource):
             return jsonify(user.money_in_the_bag)
         return {'user': 'does not exist'}
 
-
+@jwt_required()
 class Top_up(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('phone_number',
@@ -103,11 +108,7 @@ class Top_up(Resource):
                         required=True,
                         help="This field cannot be left blank!"
                         )
-    parser.add_argument('pin',
-                        type=str,
-                        required=True,
-                        help="This field cannot be left blank!"
-                        )
+
     parser.add_argument('ammount',
                         type= float,
                         required=True,
@@ -116,7 +117,7 @@ class Top_up(Resource):
 
     def put(self):
         data = Top_up.parser.parse_args()
-        user = User.find_by_phone_number(data['phone_number']) and User.find_by_pin(data['pin'])
+        user = User.find_by_phone_number(data['phone_number'])
         user.money_in_the_bag = float(user.money_in_the_bag)
         if user:
             user.money_in_the_bag = data['ammount'] + user.money_in_the_bag
@@ -125,7 +126,7 @@ class Top_up(Resource):
             return jsonify(user.money_in_the_bag)
         #return{'ddhhd':'blabla'}
 
-
+@jwt_required()
 class transfer(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('phone_number',
