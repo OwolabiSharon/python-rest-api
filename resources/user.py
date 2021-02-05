@@ -3,8 +3,8 @@ import hashlib
 from models.user import User
 from flask import jsonify
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
-from flask_jwt_extended import create_access_token,create_refresh_token
+#from flask_jwt import jwt_required
+from flask_jwt_extended import create_access_token,create_refresh_token,jwt_required
 #from flask_mail import *
 
 def encrypt_string(hash_string):
@@ -104,7 +104,7 @@ class login(Resource):
 #@jwt_required()
 class account_balance(Resource):
 #    global users
-    @jwt_required()
+    @jwt_required
     def get(self, phone_number):
         user = User.find_by_phone_number(phone_number)
         if user:
@@ -128,7 +128,7 @@ class Top_up(Resource):
                         required=True,
                         help="This field cannot be left blank!"
                         )
-    @jwt_required()
+    @jwt_required
     def put(self):
         data = Top_up.parser.parse_args()
         user = User.find_by_phone_number(data['phone_number'])
@@ -137,11 +137,10 @@ class Top_up(Resource):
             user.money_in_the_bag = data['ammount'] + user.money_in_the_bag
             user.money_in_the_bag =str(user.money_in_the_bag)
             User.save_to_db(user)
-            return {
-            'status':True,
-            'data':jsonify(user.money_in_the_bag),
+            #return jsonify(user.money_in_the_bag)
+            return {'status':True,
             'message':'your sharexy bank account has been credited'
-            },201
+            },200
         return{'message':'wo geddifok'}
 
 #@jwt_required()
@@ -168,7 +167,7 @@ class transfer(Resource):
                         help="This field cannot be left blank!"
                         )
 
-    @jwt_required()
+    @jwt_required
     def post(self):
         data = transfer.parser.parse_args()
 
@@ -177,7 +176,8 @@ class transfer(Resource):
 
 
         user.money_in_the_bag = float(user.money_in_the_bag)
-        destination.money_in_the_bag = float(destination.money_in_the_bag)
+        if destination:
+            destination.money_in_the_bag = float(destination.money_in_the_bag)
 
         if user is not None and destination is not None:
             destination.money_in_the_bag = data['ammount'] + destination.money_in_the_bag
@@ -185,7 +185,7 @@ class transfer(Resource):
             user.money_in_the_bag =str(user.money_in_the_bag)
             destination.money_in_the_bag =str(destination.money_in_the_bag)
             User.save_to_db(user)
-            return
-            jsonify(user.money_in_the_bag),{'message':'money don commot for your account'}
+            return {'message':'money don commot for your account'}
+
 
         return{'message':'either your account or the destination account does not exist'}
