@@ -1,10 +1,16 @@
 from db import db
+import hashlib
 from models.user import User
 from flask import jsonify
 from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 from flask_jwt_extended import create_access_token,create_refresh_token
 #from flask_mail import *
+
+def encrypt_string(hash_string):
+    sha_signature = \
+        hashlib.sha256(hash_string.encode()).hexdigest()
+    return sha_signature
 
 class register(Resource):
     parser = reqparse.RequestParser()
@@ -55,6 +61,9 @@ class register(Resource):
             return {'message':'user exists already '} ,400
         user = User(data['phone_number'],data['firstname'],data['middlename'],data['lastname'],data['date_of_birth'],
         data['password'],data['email'],data['pin'],'00')
+        user.password = encrypt_string(user.password)
+        user.pin = encrypt_string(user.pin)
+
         User.save_to_db(user)
         return {
         'status': True,
@@ -83,24 +92,29 @@ class login(Resource):
             access_token = create_access_token(identity=user.id,fresh =True)
             refresh_token= create_refresh_token(user.id)
             return {
+                  'status': True,
                   'access_token':access_token,
                   'message':'you are logged in'
             },200
         return {
-        'status':True,
+        'status':False,
         'message':'user not found'
         }, 404
 
-@jwt_required()
+#@jwt_required()
 class account_balance(Resource):
 #    global users
+    @jwt_required()
     def get(self, phone_number):
         user = User.find_by_phone_number(phone_number)
         if user:
             return jsonify(user.money_in_the_bag)
-        return {'user': 'does not exist'}
+        return {
+        'status':True,
+        'user': 'does not exist'
+        },404
 
-@jwt_required()
+#@jwt_required()
 class Top_up(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('phone_number',
@@ -114,7 +128,7 @@ class Top_up(Resource):
                         required=True,
                         help="This field cannot be left blank!"
                         )
-
+    @jwt_required()
     def put(self):
         data = Top_up.parser.parse_args()
         user = User.find_by_phone_number(data['phone_number'])
@@ -123,10 +137,14 @@ class Top_up(Resource):
             user.money_in_the_bag = data['ammount'] + user.money_in_the_bag
             user.money_in_the_bag =str(user.money_in_the_bag)
             User.save_to_db(user)
-            return jsonify(user.money_in_the_bag)
-        #return{'ddhhd':'blabla'}
+            return {
+            'status':True,
+            'data':jsonify(user.money_in_the_bag),
+            'message':'your sharexy bank account has been credited'
+            },201
+        return{'message':'wo geddifok'}
 
-@jwt_required()
+#@jwt_required()
 class transfer(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('phone_number',
@@ -150,7 +168,7 @@ class transfer(Resource):
                         help="This field cannot be left blank!"
                         )
 
-
+    @jwt_required()
     def post(self):
         data = transfer.parser.parse_args()
 
@@ -167,8 +185,7 @@ class transfer(Resource):
             user.money_in_the_bag =str(user.money_in_the_bag)
             destination.money_in_the_bag =str(destination.money_in_the_bag)
             User.save_to_db(user)
-            return {
-            #'account_balance':jsonify(user.money_in_the_bag),
-            'message':'money done commot for your account'
-                  }
+            return
+            jsonify(user.money_in_the_bag),{'message':'money don commot for your account'}
+
         return{'message':'either your account or the destination account does not exist'}
